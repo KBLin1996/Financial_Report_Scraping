@@ -26,7 +26,8 @@ convert_title_dict = {
 drop_titles = ['Interest Expense']
 
 # Stock symbols we traced
-stock_symbols = ['AAPL', 'AMD', 'GOOGL']
+stock_symbols = ['AAPL', 'GOOGL', 'NVDA', 'AMD', 'AMZN', 'MSFT', 'FB', 'TSLA', 'PYPL', 'SHOP', 'JPM',
+                 'VZ', 'SBUX', 'CRM', 'ROKU', 'UAA', 'SNOW']
 
 # Save path using today's date as title
 today = date.today()
