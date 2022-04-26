@@ -1,3 +1,4 @@
+import config
 import pandas as pd
 
 
@@ -74,9 +75,9 @@ def add_margin_statements(df: pd.DataFrame()) -> pd.DataFrame():
     return df
 
 
-def drop_margin_statements(df: pd.DataFrame(), drop_titles: list) -> pd.DataFrame():
+def drop_margin_statements(df: pd.DataFrame()) -> pd.DataFrame():
     # Remove some statements that are only for margin calculations
-    for title in drop_titles:
+    for title in config.drop_titles:
         df = df.drop(df.index[df['Breakdown'] == title])
     df = df.reset_index(drop=True)
 

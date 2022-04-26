@@ -1,34 +1,12 @@
 # Self-defined files
+import utils
 import config
 import margin_statements
 
 import pandas as pd
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 
-option = webdriver.ChromeOptions()
-option.add_argument('headless')
-
-
-def fetch_website(stock_symbol, report_type):
-    path = f'https://finance.yahoo.com/quote/{stock_symbol}/{report_type}?p={stock_symbol}'
-
-    driver = webdriver.Chrome(options=option)
-    driver.get(path)
-
-    # Since Yahoo Finance operates on JavaScript, running the code through this method pulls all of
-    # the data and saves it as if it were a static website
-    html = driver.execute_script("return document.body.innerHTML;")
-    soup = BeautifulSoup(html, 'lxml')
-
-    return soup
-
-
-def fetch_statements(soup, indicators):
+def fetch_statements(soup):
     header_list = list()
     row_list = list()
     label_list = list()
@@ -50,7 +28,7 @@ def fetch_statements(soup, indicators):
             content = content.text.strip()
 
             # Check if the current statement is in our indicators
-            if content in indicators or is_indicator:
+            if content in config.indicators or is_indicator:
                 is_indicator = True
 
                 # Add each item to row list
@@ -73,42 +51,33 @@ def fetch_statements(soup, indicators):
     return df
 
 
-def clean_dataframe(df: pd.DataFrame, convert_title_dict: dict) -> pd.DataFrame():
-    df = df.fillna('-')
-
-    # Replace some statements' titles based on the convert_title_dictionary from config.py
-    df['Breakdown'] = df['Breakdown'].replace(convert_title_dict)
-
-    return df
-
-
-def organize_reports(stock_symbol: str, report_types: list, indicators: list) -> pd.DataFrame():
+def organize_reports(stock_symbol: str) -> pd.DataFrame():
     df = pd.DataFrame()
 
-    for report in report_types:
-        soup = fetch_website(stock_symbol, report)
+    for report in config.report_types:
+        soup = utils.fetch_website(stock_symbol, report)
 
         # Concatenate all reports
-        df = pd.concat([df, fetch_statements(soup, indicators)], ignore_index=True)
+        df = pd.concat([df, fetch_statements(soup)], ignore_index=True)
 
     return df
 
 
 if __name__ == '__main__':
-    with pd.ExcelWriter(config.save_path) as writer:
+    with pd.ExcelWriter(config.save_path, engine='openpyxl') as writer:
         for stock_symbol in config.stock_symbols:
             # Fetch all given stock symbol's reports in HTML format from Yahoo finanace and extract the
             # indicators we want from them
-            df = organize_reports(stock_symbol, config.report_types, config.indicators)
+            df = organize_reports(stock_symbol)
 
             # Filter all nan values and replace some statements' titles
-            df = clean_dataframe(df, config.convert_title_dict)
+            df = utils.clean_dataframe(df)
 
             # Add margin statements into the dataframe
             df = margin_statements.add_margin_statements(df)
 
             # Drop titles that are only for margin calculation
-            df = margin_statements.drop_margin_statements(df, config.drop_titles)
+            df = margin_statements.drop_margin_statements(df)
 
             # Store the dateframe in a specific sheet and named it according to its stock symbol
             df.to_excel(writer, sheet_name=stock_symbol, index=False)
