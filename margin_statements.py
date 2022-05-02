@@ -28,6 +28,7 @@ def add_margin_statements(df: pd.DataFrame()) -> pd.DataFrame():
     net_margin = ['Net Margin']
     gross_margin = ['Gross Margin']
     operating_margin = ['Operating Margin']
+    net_asset_ratio = ['Net Asset Ratio']
     ROE = ['ROE']
 
     # Get all titles
@@ -71,6 +72,16 @@ def add_margin_statements(df: pd.DataFrame()) -> pd.DataFrame():
             # Calculate operating margin and append to the dataframe
             operating_margin += calculate_margin(operating_income, total_revenue, True)
             df.loc[len(df)] = operating_margin
+
+        if 'Total Assets' in all_title:
+            total_assets = df.loc[df['Breakdown'] == 'Total Assets'].values.tolist()[0][1:]
+
+            if 'Total Liabilities Net Minority Interest' in all_title:
+                total_liabilities = df.loc[df['Breakdown'] == 'Total Liabilities Net Minority Interest'].values.tolist()[0][1:]
+
+                # Calculate net asset margin and append to the dataframe
+                net_asset_ratio += calculate_margin(total_liabilities, total_assets, True)
+                df.loc[len(df)] = net_asset_ratio
 
     return df
 

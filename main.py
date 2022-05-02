@@ -3,6 +3,7 @@ import utils
 import config
 import fetch_reports
 import margin_statements
+import add_explanation
 
 import pandas as pd
 
@@ -22,6 +23,9 @@ if __name__ == '__main__':
 
             # Drop titles that are only for margin calculation
             df = margin_statements.drop_margin_statements(df)
+
+            # Add explanations to all indicators
+            df = add_explanation.merge_explanation(df)
 
             # Store the dateframe in a specific sheet and named it according to its stock symbol
             df.to_excel(writer, sheet_name=stock_symbol, index=False)
