@@ -1,7 +1,8 @@
 # Financial_Report_Scraping
 
 Description: Scrape Financial Reports (financials, balance sheet, cash flow) from Yahoo Finance.
-#### Testing OS: ```M1 Macbook Pro```
+
+Testing OS: ```M1 Macbook Pro```
 
 ### How to execute?
 ```
