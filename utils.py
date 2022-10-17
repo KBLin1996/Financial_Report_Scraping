@@ -10,7 +10,8 @@ def fetch_website(stock_symbol, report_type):
 
     path = f'https://finance.yahoo.com/quote/{stock_symbol}/{report_type}?p={stock_symbol}'
 
-    driver = webdriver.Chrome(options=option)
+    # Reference: https://selenium-python.readthedocs.io/api.html
+    driver = webdriver.Chrome(executable_path='./chromedriver', options=option)
     driver.get(path)
 
     # Since Yahoo Finance operates on JavaScript, running the code through this method pulls all of
