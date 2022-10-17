@@ -1,15 +1,12 @@
 # Financial_Report_Scraping
 
-<br> Description: Scrape Financial Reports (financials, balance sheet, cash flow) from Yahoo Finance.
-
-### Testing OS: ```M1 Macbook Pro```
-<br>
+Description: Scrape Financial Reports (financials, balance sheet, cash flow) from Yahoo Finance.
+#### Testing OS: ```M1 Macbook Pro```
 
 ### How to execute?
 ```
 python main.py
 ```
-<br>
 
 ### Important Notes:
 1. Please download the corresponding chromedriver at https://chromedriver.chromium.org/downloads and place it under this local repository.
@@ -19,5 +16,4 @@ python main.py
     2. Navigate to the path where chromedriver is located (under the local repository in this example).
     3. Execute the following command: ```xattr -d com.apple.quarantine <name-of-executable>```
 
-<p style="text-align:center">
 <img src="cannot_open_chromedrive.png" alt="Cannot Open chromedrive on Macbook" width="200">
