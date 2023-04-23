@@ -10,7 +10,7 @@ python main.py
 ```
 
 ### Important Notes:
-1. Please download the corresponding chromedriver at https://chromedriver.chromium.org/downloads and place it under this local repository.
+1. Please download the corresponding chromedriver (based on your Chrome version) at https://chromedriver.chromium.org/downloads and place it under this local repository.
 
 2. We are solving the error message showing in the image below by following three instructions. (Reference: https://stackoverflow.com/questions/60362018/macos-catalinav-10-15-3-error-chromedriver-cannot-be-opened-because-the-de)
     1. Open terminal.
